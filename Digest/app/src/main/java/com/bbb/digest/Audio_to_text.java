@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ibm.watson.developer_cloud.speech_to_text.v1.SpeechToText;
@@ -37,9 +39,9 @@ public class Audio_to_text extends AppCompatActivity {
     private RecyclerView recyclerView;
     //    private ChatAdapter mAdapter;
     private ArrayList messageArrayList;
-    private EditText inputMessage;
+    private TextView inputMessage;
     private Button btnSend;
-    private Button btnRecord;
+    private TextView btnRecord;
     //private Map<String,Object> context = new HashMap<>();
     com.ibm.watson.developer_cloud.conversation.v1.model.Context context = null;
    // StreamPlayer streamPlayer;
@@ -62,7 +64,7 @@ public class Audio_to_text extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_to_text);
 
-        inputMessage = (EditText) findViewById(R.id.rcd_msg2);
+        inputMessage = (TextView) findViewById(R.id.rcd_msg2);
 
         String flag=getIntent().getStringExtra("path");
 
@@ -78,7 +80,7 @@ public class Audio_to_text extends AppCompatActivity {
             }
         }
         else{
-            btnRecord= (Button) findViewById(R.id.btn_record2);
+            btnRecord= (TextView) findViewById(R.id.btn_record2);
 
             btnRecord.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
