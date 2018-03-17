@@ -1,0 +1,20 @@
+{
+	"manifest_version":2,
+
+	"name":"Page summarizer",
+	"description":"read less and learn more",
+	"version":"1.0",
+
+	"browser_action": {
+		"default_icon":"icon.png"
+		// "default_popup":"popup.html"
+	},
+	"background": {
+		"scripts": ["index.js"],
+		"persistent":false
+	},
+	"permissions": [
+		"activeTab",
+		"storage"
+	]
+}
