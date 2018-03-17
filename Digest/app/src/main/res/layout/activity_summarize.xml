@@ -5,6 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.bbb.digest.summarize">
+    <ScrollView
+        android:layout_height="495dp"
+        android:layout_width="146dp"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp">
 
     <TextView
         android:id="@+id/textView"
@@ -13,4 +18,5 @@
         android:text="TextView"
         tools:layout_editor_absoluteX="162dp"
         tools:layout_editor_absoluteY="174dp" />
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>

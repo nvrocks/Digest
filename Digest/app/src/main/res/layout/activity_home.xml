@@ -1,30 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/land1"
     tools:context="com.bbb.digest.Home">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:layout_width="110dp"
+        android:layout_height="110dp"
         android:layout_gravity="center_horizontal"
-        android:text="Audio to text"
-        android:id="@+id/stt"/>
+        android:src="@drawable/audio2"
+        android:id="@+id/stt"
+        android:layout_marginBottom="20dp"
+        android:layout_above="@+id/vtt"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="27dp" />
+    <ImageView
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/image2"
+        android:id="@+id/ocr"
+        android:layout_marginBottom="13dp"
+        android:layout_above="@+id/stt"
+        android:layout_alignStart="@+id/vtt" />
+    <ImageView
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/video2"
+        android:id="@+id/vtt"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="57dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
 
-    <Button
+    <TextView
+        android:id="@+id/digest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="OCR"
-        android:id="@+id/ocr"/>
+        android:layout_alignParentTop="true"
+        android:textColor="@android:color/white"
+        android:layout_centerHorizontal="true"
+        android:textSize="80dp"
+        android:layout_marginTop="51dp"
+        android:text="DIGEST" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Video to text"
-        android:id="@+id/vtt"/>
-</LinearLayout>
+
+</RelativeLayout>
