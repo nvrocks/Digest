@@ -1,4 +1,4 @@
-package com.bbb.digest;
+package com.bbb.testt;
 
 import android.Manifest;
 import android.content.Intent;
@@ -18,12 +18,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.ibm.watson.developer_cloud.android.library.audio.MicrophoneHelper;
+import com.ibm.watson.developer_cloud.android.library.audio.MicrophoneInputStream;
+import com.ibm.watson.developer_cloud.android.library.audio.StreamPlayer;
+import com.ibm.watson.developer_cloud.android.library.audio.utils.ContentType;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.SpeechToText;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.RecognizeOptions;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechResults;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.BaseRecognizeCallback;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.RecognizeCallback;
-//import com.ibm.watson.developer_cloud.text_to_speech.v1.TextToSpeech;
+import com.ibm.watson.developer_cloud.text_to_speech.v1.TextToSpeech;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -40,7 +44,7 @@ public class Audio_to_text extends AppCompatActivity {
     private Button btnRecord;
     //private Map<String,Object> context = new HashMap<>();
     com.ibm.watson.developer_cloud.conversation.v1.model.Context context = null;
-   // StreamPlayer streamPlayer;
+    StreamPlayer streamPlayer;
     private boolean initialRequest;
     private boolean permissionToRecordAccepted = false;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
@@ -48,9 +52,9 @@ public class Audio_to_text extends AppCompatActivity {
     private static final int RECORD_REQUEST_CODE = 101;
     private boolean listening = false;
     private SpeechToText speechService;
-   // private MicrophoneInputStream capture;
+    private MicrophoneInputStream capture;
     //    private SpeakerLabelsDiarization.RecoTokens recoTokens;
-   // private MicrophoneHelper microphoneHelper;
+    private MicrophoneHelper microphoneHelper;
     public static final int PICK_AUDIO_REQUEST = 234, PICK_FILE_REQUEST = 123;
     private Uri filePath_audio;
     InputStream in = null;
@@ -63,11 +67,11 @@ public class Audio_to_text extends AppCompatActivity {
         btnRecord= (Button) findViewById(R.id.btn_record2);
         inputMessage = (EditText) findViewById(R.id.rcd_msg2);
 
-       // microphoneHelper = new MicrophoneHelper(this);
+        microphoneHelper = new MicrophoneHelper(this);
 
         //Watson Text-to-Speech Service on Bluemix
-        /*final TextToSpeech service = new TextToSpeech();
-        service.setUsernameAndPassword("Text to Speech service username", "Text to Speech service password");*/
+        final TextToSpeech service = new TextToSpeech();
+        service.setUsernameAndPassword("Text to Speech service username", "Text to Speech service password");
 
         int permission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.RECORD_AUDIO);
@@ -178,14 +182,14 @@ public class Audio_to_text extends AppCompatActivity {
     }
 
     //Private Methods - Speech to Text
-   /* private RecognizeOptions getRecognizeOptions() {
+    private RecognizeOptions getRecognizeOptions() {
         return new RecognizeOptions.Builder()
                 .contentType(ContentType.OPUS.toString())
                 //.model("en-UK_NarrowbandModel")
                 .interimResults(true)
                 .inactivityTimeout(2000)
                 .build();
-    }*/
+    }
     //Watson Speech to Text Methods.
     private class MicrophoneRecognizeDelegate implements RecognizeCallback {
         @Override

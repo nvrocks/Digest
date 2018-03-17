@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context="com.bbb.digest.Video_to_audio_convertor">
+    tools:context="com.bbb.testt.Video_to_audio_convertor">
 
     <ImageView
         android:layout_marginTop="20dp"

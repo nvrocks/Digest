@@ -1,4 +1,4 @@
-package com.bbb.digest;
+package com.bbb.testt;
 
 import android.Manifest;
 import android.content.Intent;
@@ -24,7 +24,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
 
 import cafe.adriel.androidaudioconverter.AndroidAudioConverter;
 import cafe.adriel.androidaudioconverter.callback.IConvertCallback;
@@ -36,12 +35,12 @@ public class Video_to_audio_convertor extends AppCompatActivity {
     public static final int PICK_VIDEO_REQUEST= 100;
     private Uri filePath_video;
     ImageView thumbnail;
-    java.util.Date date= new java.util.Date();
-    String ad = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date.getTime());
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        final String filein = getExternalFilesDir(null).getAbsoluteFile()+"/in.mp4";
+        final String fileoutaudio = getExternalFilesDir(null).getAbsoluteFile()+"/out.aac";
         setContentView(R.layout.activity_video_to_audio_convertor);
         RequestRunTimePermission();
         //Util.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -54,7 +53,7 @@ public class Video_to_audio_convertor extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent=new Intent();
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                intent.setType("video/mp4");
+                intent.setType("video/*");
                 startActivityForResult(Intent.createChooser(intent, "Select a video"), PICK_VIDEO_REQUEST);
 
             }
@@ -65,14 +64,22 @@ public class Video_to_audio_convertor extends AppCompatActivity {
         one.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+            Controller.getInstance().run(new String[]{
+                "-y",
+                "-i",
+                filein,
+                "-vn",
+                "-acodec",
+                "copy",
+                fileoutaudio
+            });
 
             }
         });
 
     }
 
-    @Override
+    /*@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -85,24 +92,15 @@ public class Video_to_audio_convertor extends AppCompatActivity {
                 media.setDataSource(getApplicationContext(),filePath_video);
                 Bitmap extractedImage = media.getFrameAtTime(100000);
 
-                final String filein = path;
-                final String fileoutaudio = getExternalFilesDir(null).getAbsoluteFile()+"/out"+ad+".aac";
-
                 Bitmap ThumbVideo = ThumbnailUtils.extractThumbnail(extractedImage, 200, 200);
 
                 thumbnail.setImageBitmap(ThumbVideo);
 
-                Controller.getInstance().run(new String[]{
-                        "-y",
-                        "-i",
-                        filein,
-                        "-vn",
-                        "-acodec",
-                        "copy",
-                        fileoutaudio
-                });
-
-                System.out.println("Path: "+path);
+                /*File myFile = new File(filePath_video.toString());
+                String path=myFile.getAbsolutePath();*/
+                /*InputStream pathis=getContentResolver().openInputStream(filePath_video);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(pathis));*/
+               /* System.out.println("Path: "+path);
                 Toast.makeText(this,"Video imported",Toast.LENGTH_LONG).show();
 
             }
@@ -113,7 +111,7 @@ public class Video_to_audio_convertor extends AppCompatActivity {
         catch (Exception e){
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
-    }
+    }*/
     public void RequestRunTimePermission(){
         if (ActivityCompat.shouldShowRequestPermissionRationale(Video_to_audio_convertor.this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
         } else {
@@ -155,10 +153,13 @@ public class Video_to_audio_convertor extends AppCompatActivity {
          *  Update with a valid audio file!
          *  Supported formats: {@link AndroidAudioConverter.AudioFormat}
          */
+        final String filein = getExternalFilesDir(null).getAbsoluteFile()+"/in.mp4";
+        final String fileoutaudio = getExternalFilesDir(null).getAbsoluteFile()+"/out.aac";
+        final String fileoutvideo = getExternalFilesDir(null).getAbsoluteFile()+"/outv.mp3";
 
         InputStream in = null;
 
-        String path=getExternalFilesDir(null).getAbsoluteFile()+"/out"+ad+".aac";
+        String path=getExternalFilesDir(null).getAbsoluteFile()+"/out.aac";
         File wavFile = new File(path);
         IConvertCallback callback = new IConvertCallback() {
             @Override
