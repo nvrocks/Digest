@@ -39,4 +39,10 @@ dependencies {
     implementation 'com.ibm.watson.developer_cloud:text-to-speech:4.2.1'
     implementation 'com.ibm.watson.developer_cloud:speech-to-text:4.2.1'
     implementation 'com.ibm.watson.developer_cloud:android-sdk:0.4.3'
+
+    //for OCR
+    compile 'com.google.android.gms:play-services-vision:11.4.0'
+
+    //for converting .aac to .mp3
+    compile 'com.github.adrielcafe:AndroidAudioConverter:0.0.8'
 }
