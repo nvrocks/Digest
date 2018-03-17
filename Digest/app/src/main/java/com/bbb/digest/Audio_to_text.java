@@ -25,6 +25,8 @@ import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.BaseRecognizeC
 import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.RecognizeCallback;
 //import com.ibm.watson.developer_cloud.text_to_speech.v1.TextToSpeech;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,34 +62,35 @@ public class Audio_to_text extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_to_text);
 
-        btnRecord= (Button) findViewById(R.id.btn_record2);
         inputMessage = (EditText) findViewById(R.id.rcd_msg2);
 
-       // microphoneHelper = new MicrophoneHelper(this);
+        String flag=getIntent().getStringExtra("path");
 
-        //Watson Text-to-Speech Service on Bluemix
-        /*final TextToSpeech service = new TextToSpeech();
-        service.setUsernameAndPassword("Text to Speech service username", "Text to Speech service password");*/
-
-        int permission = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.RECORD_AUDIO);
-
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            Log.i(TAG, "Permission to record denied");
-            makeRequest();
-        }
-
-
-        btnRecord.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-
-                Intent intent;
-                intent = new Intent();
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                intent.setType("audio/*");
-                startActivityForResult(Intent.createChooser(intent, "Select an audio"), PICK_AUDIO_REQUEST);
+        if(!flag.equalsIgnoreCase("0")){
+            try {
+                btnRecord.setVisibility(View.INVISIBLE);
+                final String path = getExternalFilesDir(null).getAbsoluteFile()+"/out"+flag+".mp3";
+                //File theFile =new File(path);
+                in = new FileInputStream(path);
+                recordMessage();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             }
-        });
+        }
+        else{
+            btnRecord= (Button) findViewById(R.id.btn_record2);
+
+            btnRecord.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+
+                    Intent intent;
+                    intent = new Intent();
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    intent.setType("audio/*");
+                    startActivityForResult(Intent.createChooser(intent, "Select an audio"), PICK_AUDIO_REQUEST);
+                }
+            });
+        }
     }
 
     @Override
@@ -131,11 +134,6 @@ public class Audio_to_text extends AppCompatActivity {
         }
         if (!permissionToRecordAccepted ) finish();
     }
-    protected void makeRequest() {
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.RECORD_AUDIO},
-                RECORD_REQUEST_CODE);
-    }
 
     //Record a message via Watson Speech to Text
     private void recordMessage() {
@@ -147,7 +145,7 @@ public class Audio_to_text extends AppCompatActivity {
         password: McoMYPdkDsjF
         */
         speechService = new SpeechToText();
-        speechService.setUsernameAndPassword("a1db2e54-8972-48dc-81c5-7adc9f39b5c3", "McoMYPdkDsjF");
+        speechService.setUsernameAndPassword("beccabc7-a6d6-4aaf-bad7-f7560feb0b61", "i4haiTjew7xJ");
 
         RecognizeOptions options = new RecognizeOptions.Builder()
                 .model("en-US_BroadbandModel").contentType("audio/mp3")

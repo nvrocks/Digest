@@ -100,7 +100,10 @@ public class Ocr extends AppCompatActivity {
                             stringBuilder.append("\n");
                         }
 
-                        ocrtext.setText(stringBuilder.toString());
+                        //ocrtext.setText(stringBuilder.toString());
+                        Intent i=new Intent(this,summarize.class);
+                        i.putExtra("text",stringBuilder.toString());
+                        startActivity(i);
                     }
 
                 } catch (IOException e) {

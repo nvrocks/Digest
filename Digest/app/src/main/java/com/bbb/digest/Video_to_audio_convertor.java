@@ -164,6 +164,10 @@ public class Video_to_audio_convertor extends AppCompatActivity {
             @Override
             public void onSuccess(File convertedFile) {
                 Toast.makeText(Video_to_audio_convertor.this, "SUCCESS: " + convertedFile.getPath(), Toast.LENGTH_LONG).show();
+
+                Intent i = new Intent(Video_to_audio_convertor.this, Audio_to_text.class);
+                i.putExtra("path", ad);
+                startActivity(i);
             }
             @Override
             public void onFailure(Exception error) {
@@ -177,5 +181,7 @@ public class Video_to_audio_convertor extends AppCompatActivity {
                 .setFormat(AudioFormat.MP3)
                 .setCallback(callback)
                 .convert();
+
+
     }
 }

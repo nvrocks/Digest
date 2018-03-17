@@ -23,6 +23,7 @@ public class Home extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i1 = new Intent(Home.this, Audio_to_text.class);
+                i1.putExtra("path","0");
                 startActivity(i1);
             }
         });
