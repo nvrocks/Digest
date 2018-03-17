@@ -1,7 +1,11 @@
 package com.bbb.digest;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -25,6 +29,8 @@ import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.BaseRecognizeC
 import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.RecognizeCallback;
 import com.ibm.watson.developer_cloud.text_to_speech.v1.TextToSpeech;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -49,6 +55,9 @@ public class Audio_to_text extends AppCompatActivity {
     private MicrophoneInputStream capture;
     //    private SpeakerLabelsDiarization.RecoTokens recoTokens;
     private MicrophoneHelper microphoneHelper;
+    public static final int PICK_AUDIO_REQUEST = 234, PICK_FILE_REQUEST = 123;
+    private Uri filePath_audio;
+    InputStream in = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,11 +84,38 @@ public class Audio_to_text extends AppCompatActivity {
 
         btnRecord.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                recordMessage();
+
+                Intent intent;
+                intent = new Intent();
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setType("audio/*");
+                startActivityForResult(Intent.createChooser(intent, "Select an audio"), PICK_AUDIO_REQUEST);
             }
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        try {
+            if (requestCode == PICK_AUDIO_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+                filePath_audio = data.getData();
+//                String filePath = data.getData().getPath();
+
+                try {
+                    in = getContentResolver().openInputStream(filePath_audio);
+                    recordMessage();
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        catch (Exception e){
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
     // Speech-to-Text Record Audio permission
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -135,28 +171,12 @@ public class Audio_to_text extends AppCompatActivity {
 
         };
 
-        //            InputStream istream = getAssets().open("audio_file.flac");
-//            URL url = getClass().getResource("/assets/audio_file.flac");
-//            File f = new File(url.toURI());
-//
-//            InputStream is = null;
-//            //File f = new File("filename.bin");
-//            if (f.isFile()) {
-//                is = new FileInputStream(f);
-//            }
-//            else {
-//                //cope with missing file
-//            }
-
-        InputStream in = null;
-
-        try {
-            //in = getClass().getResourceAsStream("android.resource://com.example.anshul.speech_to_text/raw/audio_file.flac");
+        /*try {
             in = getAssets().open("speech.mp3");
         }
         catch (Exception e){
             e.printStackTrace();
-        }
+        }*/
 
         speechService.recognizeUsingWebSocket(in, options, callback);
     }
