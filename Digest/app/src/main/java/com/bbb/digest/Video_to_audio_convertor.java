@@ -1,13 +1,24 @@
 package com.bbb.digest;
 
 import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import cafe.adriel.androidaudioconverter.AndroidAudioConverter;
 import cafe.adriel.androidaudioconverter.callback.IConvertCallback;
@@ -15,32 +26,96 @@ import cafe.adriel.androidaudioconverter.model.AudioFormat;
 
 public class Video_to_audio_convertor extends AppCompatActivity {
 
+
+    public static final int PICK_VIDEO_REQUEST= 100;
+    private Uri filePath_video;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_to_audio_convertor);
+        RequestRunTimePermission();
+        //Util.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        //Util.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        Button openVideo=(Button)findViewById(R.id.open);
+        openVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent();
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setType("video/*");
+                startActivityForResult(Intent.createChooser(intent, "Select a video"), PICK_VIDEO_REQUEST);
 
-        Util.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
-        Util.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+        });
+
     }
 
-    public void convertAudio(View v){
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        try {
+            if (requestCode == PICK_VIDEO_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+                filePath_video = data.getData();
+                String path = FilePath.getPath(this, filePath_video);
+                /*File myFile = new File(filePath_video.toString());
+                String path=myFile.getAbsolutePath();*/
+                /*InputStream pathis=getContentResolver().openInputStream(filePath_video);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(pathis));*/
+                System.out.println("Path: "+path);
+
+            }
+            else if (resultCode == RESULT_OK && data != null && data.getData() != null) {
+               Toast.makeText(this,"Corrupt file",Toast.LENGTH_LONG).show();
+            }
+        }
+        catch (Exception e){
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+    public void RequestRunTimePermission(){
+        if (ActivityCompat.shouldShowRequestPermissionRationale(Video_to_audio_convertor.this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+        } else {
+            ActivityCompat.requestPermissions(Video_to_audio_convertor.this,new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int RC, String per[], int[] Result) {
+        switch (RC) {
+            case 1:
+                if (Result.length > 0 && Result[0] == PackageManager.PERMISSION_GRANTED) {
+                } else {
+                }
+                break;
+        }
+    }
+
+    public String getRealPathFromURI(Uri contentUri) {
+
+        // can post image
+        String [] proj={MediaStore.Video.Media.DATA};
+        Cursor cursor = managedQuery( contentUri,
+                proj, // Which columns to return
+                null,       // WHERE clause; which rows to return (all rows)
+                null,       // WHERE clause selection arguments (none)
+                null); // Order-by clause (ascending by name)
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+
+        return cursor.getString(column_index);
+    }
+
+    /*public void convertAudio(View v){
         /**
          *  Update with a valid audio file!
          *  Supported formats: {@link AndroidAudioConverter.AudioFormat}
          */
+       /* final String filein = getExternalFilesDir(null).getAbsoluteFile()+"/in.mp4";
+        final String fileoutaudio = getExternalFilesDir(null).getAbsoluteFile()+"/out.aac";
+        final String fileoutvideo = getExternalFilesDir(null).getAbsoluteFile()+"/outv.mp3";
 
         InputStream in = null;
 
-        /*try {
-            //in = getClass().getResourceAsStream("android.resource://com.example.anshul.speech_to_text/raw/audio_file.flac");
-            in = getAssets().open("out.aac");
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }*/
-
-        //       File wavFile = new File("android.resource://com.example.anshul.speech_to_text/out.aac");
         String path=getExternalFilesDir(null).getAbsoluteFile()+"/out.aac";
         File wavFile = new File(path);
         IConvertCallback callback = new IConvertCallback() {
@@ -60,5 +135,5 @@ public class Video_to_audio_convertor extends AppCompatActivity {
                 .setFormat(AudioFormat.MP3)
                 .setCallback(callback)
                 .convert();
-    }
+    }*/
 }
