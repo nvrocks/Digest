@@ -16,6 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Audio_to_text" />
+        <activity android:name=".Ocr"></activity>
     </application>
 
 </manifest>
