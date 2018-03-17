@@ -210,7 +210,7 @@ public class Audio_to_text extends AppCompatActivity {
     private void showMicText(final String text) {
         runOnUiThread(new Runnable() {
             @Override public void run() {
-                String ftext=inputMessage.getText().toString()+text;
+                String ftext=inputMessage.getText().toString()+text+". ";
                 inputMessage.setText(ftext);
             }
         });
