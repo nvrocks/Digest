@@ -51,7 +51,7 @@ public class Ocr extends AppCompatActivity {
 
         ocrimg.setImageBitmap(bitmap);*/
 
-        ocrbutton.setOnClickListener(new View.OnClickListener() {
+        ocrimg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
