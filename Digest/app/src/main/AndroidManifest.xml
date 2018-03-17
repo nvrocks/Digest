@@ -13,9 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!--provider android:name="com.bbb.digest.content.ContentProvider"
+        <!--
+            provider android:name="com.bbb.digest.content.ContentProvider"
             android:authorities="@string/content_provider"
-            android:exported="false" /-->
+            android:exported="false" /
+        -->
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -38,6 +40,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Video_to_audio_convertor"></activity>
     </application>
 
 </manifest>
