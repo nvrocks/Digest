@@ -1,5 +1,6 @@
 package com.bbb.digest;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,6 +8,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
@@ -33,6 +35,8 @@ public class Ocr extends AppCompatActivity {
     ImageView ocrimg;
     Button ocrbutton;
     TextView ocrtext;
+    ProgressDialog progressDialog;
+
     public static final int PICK_IMAGE_REQUEST = 123;
     private Uri filePath_photo;
 
@@ -44,7 +48,7 @@ public class Ocr extends AppCompatActivity {
         ocrimg = (ImageView) findViewById(R.id.ocrimg);
         ocrtext = (TextView) findViewById(R.id.ocrtext);
         ocrbutton = (Button) findViewById(R.id.ocrbutton);
-
+        ocrtext.setText("sample");
         /*final Bitmap bitmap = BitmapFactory.decodeResource(
                 getApplicationContext().getResources(), R.drawable.text4
         );
@@ -125,6 +129,14 @@ public class Ocr extends AppCompatActivity {
 
     public void printt(String s){
 
+        System.out.println(s);
+
+        /*progressDialog=new ProgressDialog(Ocr.this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Generating the summary...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();*/
+
         AndroidNetworking.initialize(getApplicationContext());
         OkHttpClient okHttpClient = new OkHttpClient() .newBuilder()
                 .addNetworkInterceptor(new StethoInterceptor())
@@ -146,6 +158,7 @@ public class Ocr extends AppCompatActivity {
                     @Override
                     public void onResponse(String s) {
                         Log.d("CHECK",s);
+                        System.out.println("string: "+s);
                         int  i, start = 0, end = 0;
                         for(i = 0; i < s.length(); i++){
                             if(s.charAt(i) == '<' && s.charAt(i+1) == 'p' & s.charAt(i+2) == '>')
@@ -153,12 +166,15 @@ public class Ocr extends AppCompatActivity {
                             else if(s.charAt(i) == '<' && s.charAt(i+1) == '/' && s.charAt(i+2) == 'p' && s.charAt(i+3) == '>')
                                 end = i-1;
                         }
-                        s = s.substring(start, end);
-                        ocrtext.setText(s);
+                       s = s.substring(start, end);
+
+                        ocrtext.setText(Html.fromHtml(s));
+                        //progressDialog.dismiss();
                     }
 
                     @Override
                     public void onError(ANError anError) {
+                        //progressDialog.dismiss();
                         Log.d("CHECKKKK","EROOR OCCURED");
 
                     }

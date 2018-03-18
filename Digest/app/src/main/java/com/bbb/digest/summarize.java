@@ -1,9 +1,11 @@
 package com.bbb.digest;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -31,6 +33,7 @@ import okhttp3.OkHttpClient;
 public class summarize extends AppCompatActivity {
 
     TextView tv;
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,13 +42,18 @@ public class summarize extends AppCompatActivity {
         tv = (TextView)findViewById(R.id.textView);
         String s = getIntent().getStringExtra("text");
 
+        progressDialog=new ProgressDialog(summarize.this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Generating the summary...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
         AndroidNetworking.initialize(getApplicationContext());
         OkHttpClient okHttpClient = new OkHttpClient() .newBuilder()
                 .addNetworkInterceptor(new StethoInterceptor())
                 .build();
         AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
 
-        s = "Cricket is a bat-and-ball game played between two teams of eleven players each on a cricket field, at the centre of which is a rectangular 22-yard-long (20 metres) pitch with a target at each end called the wicket (a set of three wooden stumps upon which two bails sit). Each phase of play is called an innings, during which one team bats, attempting to score as many runs as possible, whilst their opponents bowl and field, attempting to minimise the number of runs scored. When each innings ends, the teams usually swap roles for the next innings (i.e. the team that previously batted will bowl/field, and vice versa). The teams each bat for one or two innings, depending on the type of match. The winning team is the one that scores the most runs, including any extras gained (except when the result is not a win/loss result).";
+     //   s = "Cricket is a bat-and-ball game played between two teams of eleven players each on a cricket field, at the centre of which is a rectangular 22-yard-long (20 metres) pitch with a target at each end called the wicket (a set of three wooden stumps upon which two bails sit). Each phase of play is called an innings, during which one team bats, attempting to score as many runs as possible, whilst their opponents bowl and field, attempting to minimise the number of runs scored. When each innings ends, the teams usually swap roles for the next innings (i.e. the team that previously batted will bowl/field, and vice versa). The teams each bat for one or two innings, depending on the type of match. The winning team is the one that scores the most runs, including any extras gained (except when the result is not a win/loss result).";
         s = "http://192.168.43.124:8000/run/?str="+s;
 
 
@@ -68,11 +76,13 @@ public class summarize extends AppCompatActivity {
                                 end = i-1;
                         }
                         s = s.substring(start, end);
-                        tv.setText(s);
+                        tv.setText(Html.fromHtml(s));
+                        progressDialog.dismiss();
                     }
 
                     @Override
                     public void onError(ANError anError) {
+                        progressDialog.dismiss();
                         Log.d("CHECKKKK","EROOR OCCURED");
 
                     }
