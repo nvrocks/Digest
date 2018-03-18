@@ -19,5 +19,7 @@ from . import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^run/$',views.running,name="running"),
     url(r'^summarize_ext',views.summarize_ext,name="summarize_ext"),
+    # url(r'^summarize_ext_video',views.summarize_ext_video,name="summarize_ext_video")
 ]

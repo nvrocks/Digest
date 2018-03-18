@@ -1,6 +1,10 @@
 import pyperclip,re
+
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
+
+
 import nltk
 # nltk.download('stopwords')
 # nltk.download('punkt')
@@ -58,7 +62,7 @@ class FrequencySummarizer:
 		return nlargest(n, ranking, key=ranking.get)
 
 
-
+@csrf_exempt
 def summarize_ext(request):
 
 	prep_list = ["is", "The","the", "A", "to", "be", "are", "Really", "really", "Very", "its","Its","also","very", "Just", "just", "That", "that", "Then", "then", "Totally", "totally", "Completely", "completely", "Absolutely", "absolutely", "literally", "Literally", "Definitely", "definitely", "certainly", "Certainly", "actually", "Actually", "Basically", "basically", "virtually", "Virtually", "Rather", "rather", "quite", "Quite", "Somehow", "somehow", "somewhat", "Somewhat"]
@@ -98,16 +102,65 @@ def summarize_ext(request):
 		summary1 += s
 
 	summary = re.sub(r'\[\d+\]',"",summary1)
-	print(summary)
+	# print(summary)
 
-	return render(request,'extension.html',{'data':summary,'list':new_list,'list1':list1})
-
-
+	return render(request,'extension.html',{'data':summary})
 
 
 
 
-def processit(request):
-	data = request.GET['str']
-	return render(request,'process.html',{'data':data})
+
+@csrf_exempt
+def running(request):
+	if request.method=="POST":
+		text = request["POST"]
+	text = request.GET['str']
+
+	prep_list = ["is", "The","the", "A", "to", "be", "are", "Really", "really", "Very", "its","Its","also","very", "Just", "just", "That", "that", "Then", "then", "Totally", "totally", "Completely", "completely", "Absolutely", "absolutely", "literally", "Literally", "Definitely", "definitely", "certainly", "Certainly", "actually", "Actually", "Basically", "basically", "virtually", "Virtually", "Rather", "rather", "quite", "Quite", "Somehow", "somehow", "somewhat", "Somewhat"]
+	summ = []
+	summ1 = []
+	summ2 = []
+	new_list = []
+	list1 = []
+	fs = FrequencySummarizer()
+	# text = "A purely peer-to-peer version of electronic cash would allow online payments to be sent directly from one party to another without going through a financial institution. Digital signatures provide part of the solution, but the main benefits are lost if a trusted third party is still required to prevent double-spending. We propose a solution to the double-spending problem using a peer-to-peer network. The network timestamps transactions by hashing them into an ongoing chain of hash-based proof-of-work, forming a record that cannot be changed without redoing the proof-of-work. The longest chain not only serves as proof of the sequence of events witnessed, but proof that it came from the largest pool of CPU power. As long as a majority of CPU power is controlled by nodes that are not cooperating to attack the network, they'll generate the longest chain and outpace attackers. The network itself requires minimal structure. Messages are broadcast on a best effort basis, and nodes can leave and rejoin the network at will, accepting the longest proof-of-work chain as proof of what happened while they were gone."
+	# text = str(pyperclip.paste())
+	sentence = 0
+	for c in text:
+		if c is '.':
+			sentence+=1
+
+# print("*",sentence);
+	sentence = sentence//3
+# print("*",sentence);
+
+	for s in fs.summarize(text, sentence):
+		summ.append(s)
+
+	for s in summ:
+		for word in s.split():
+			list1.append(word)
+			if word in prep_list:
+				new_list.append(word)
+				s = s.replace(word,'')
+		summ1.append(s)
+
+	for s in summ1:
+		s = s.replace('  ', ' ')
+		summ2.append(s)
+	summary1 = ""
+	for s in summ2:
+		summary1 += s
+	# summary = summary1
+	summary = re.sub(r'\[\d+\]',"",summary1)
+	# print(summary)
+
+	# return render(request,'extension.html',{'data':summary,'list':new_list,'list1':list1})
+
+
+
+	return render(request,'extension.html',{'data':summary})
 	# return (request,'templates/process.html')
+
+
+
