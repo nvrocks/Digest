@@ -65,12 +65,12 @@ public class Audio_to_text extends AppCompatActivity {
         setContentView(R.layout.activity_audio_to_text);
 
         inputMessage = (TextView) findViewById(R.id.rcd_msg2);
-
+        final Button summarize=(Button)findViewById(R.id.ok);
         String flag=getIntent().getStringExtra("path");
 
         if(!flag.equalsIgnoreCase("0")){
             try {
-                btnRecord.setVisibility(View.INVISIBLE);
+             //   btnRecord.setVisibility(View.INVISIBLE);
                 final String path = getExternalFilesDir(null).getAbsoluteFile()+"/out"+flag+".mp3";
                 //File theFile =new File(path);
                 in = new FileInputStream(path);
@@ -93,6 +93,16 @@ public class Audio_to_text extends AppCompatActivity {
                 }
             });
         }
+
+        summarize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(Audio_to_text.this,summarize.class);
+                i.putExtra("text",inputMessage.getText().toString());
+                startActivity(i);
+                finish();
+            }
+        });
     }
 
     @Override

@@ -47,9 +47,9 @@ public class Home extends AppCompatActivity {
         stt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ocr.startAnimation(animback);
-                vtt.startAnimation(animback);
-                stt.startAnimation(revback);
+                //ocr.startAnimation(animback);
+                //vtt.startAnimation(animback);
+                //stt.startAnimation(revback);
                 Intent i1 = new Intent(Home.this, Audio_to_text.class);
                 i1.putExtra("path","0");
                 startActivity(i1);
