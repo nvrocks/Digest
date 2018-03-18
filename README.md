@@ -1,5 +1,5 @@
 # Digest
-Digest is an application + chrome extension which lets you summarize long articles, audio & video files.
+Digest is an android application + chrome extension which lets you summarize long articles, audio & video files.
 
 # Requirements
 * Python 3.x
