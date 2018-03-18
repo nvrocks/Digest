@@ -1,9 +1,11 @@
+![Logo](https://github.com/nvrocks/Digest/blob/master/images/logo.png)
+
 # Digest
 Digest is an android application + chrome extension which lets you summarize long articles, audio & video files.
 
 # Requirements
-* Python 3.x
-* nltk library
+* Python 3.x  ![Logo](https://github.com/nvrocks/Digest/blob/master/images/python_nltk.png)
+* nltk library   
 * Android Studio
 
 # Working
