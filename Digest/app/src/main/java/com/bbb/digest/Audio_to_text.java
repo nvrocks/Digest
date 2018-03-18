@@ -1,6 +1,7 @@
 package com.bbb.digest;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -43,6 +44,9 @@ public class Audio_to_text extends AppCompatActivity {
     private TextView inputMessage;
     private Button btnSend;
     private TextView btnRecord;
+
+    ProgressDialog progressDialog;
+
     //private Map<String,Object> context = new HashMap<>();
     com.ibm.watson.developer_cloud.conversation.v1.model.Context context = null;
    // StreamPlayer streamPlayer;
@@ -52,6 +56,7 @@ public class Audio_to_text extends AppCompatActivity {
     private static String TAG = "MainActivity";
     private static final int RECORD_REQUEST_CODE = 101;
     private boolean listening = false;
+
     private SpeechToText speechService;
    // private MicrophoneInputStream capture;
     //    private SpeakerLabelsDiarization.RecoTokens recoTokens;
@@ -159,6 +164,12 @@ public class Audio_to_text extends AppCompatActivity {
         username: a1db2e54-8972-48dc-81c5-7adc9f39b5c3
         password: McoMYPdkDsjF
         */
+
+        progressDialog=new ProgressDialog(Audio_to_text.this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Fetching text...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
         speechService = new SpeechToText();
         speechService.setUsernameAndPassword("beccabc7-a6d6-4aaf-bad7-f7560feb0b61", "i4haiTjew7xJ");
 
@@ -172,7 +183,13 @@ public class Audio_to_text extends AppCompatActivity {
             @Override
             public void onTranscription(SpeechResults speechResults) {
                 String text = speechResults.getResults().get(0).getAlternatives().get(0).getTranscript();
-                if(speechResults.getResults().get(0).isFinal()) {
+                int word = 0, i;
+                for(i = 0; i < text.length(); i++){
+                    if(text.charAt(i) == ' ')
+                        word++;
+                }
+                if(speechResults.getResults().get(0).isFinal() && word>5) {
+                    progressDialog.dismiss();
                     showMicText(text);
                 }
                 System.out.println(speechResults);
@@ -207,6 +224,7 @@ public class Audio_to_text extends AppCompatActivity {
             if(speechResults.getResults() != null && !speechResults.getResults().isEmpty()) {
                 String text = speechResults.getResults().get(0).getAlternatives().get(0).getTranscript();
                 if(speechResults.isFinal()) {
+
                     showMicText(text);
                 }
             }
