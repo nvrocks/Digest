@@ -47,9 +47,8 @@ public class Video_to_audio_convertor extends AppCompatActivity {
         //Util.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
         //Util.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         Button openVideo=(Button)findViewById(R.id.open);
-        Button one=(Button)findViewById(R.id.one);
         thumbnail = (ImageView) findViewById(R.id.thumbnail);
-        openVideo.setOnClickListener(new View.OnClickListener() {
+        thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent();
@@ -59,17 +58,6 @@ public class Video_to_audio_convertor extends AppCompatActivity {
 
             }
         });
-
-
-
-        one.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-        });
-
     }
 
     @Override
@@ -135,20 +123,6 @@ public class Video_to_audio_convertor extends AppCompatActivity {
         }
     }
 
-    public String getRealPathFromURI(Uri contentUri) {
-
-        // can post image
-        String [] proj={MediaStore.Video.Media.DATA};
-        Cursor cursor = managedQuery( contentUri,
-                proj, // Which columns to return
-                null,       // WHERE clause; which rows to return (all rows)
-                null,       // WHERE clause selection arguments (none)
-                null); // Order-by clause (ascending by name)
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-
-        return cursor.getString(column_index);
-    }
 
     public void convertAudio(View v){
         /**
