@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -65,12 +66,14 @@ public class Audio_to_text extends AppCompatActivity {
         setContentView(R.layout.activity_audio_to_text);
 
         inputMessage = (TextView) findViewById(R.id.rcd_msg2);
+        CardView cardopen=(CardView)findViewById(R.id.cardopen);
         final Button summarize=(Button)findViewById(R.id.ok);
         String flag=getIntent().getStringExtra("path");
 
         if(!flag.equalsIgnoreCase("0")){
             try {
              //   btnRecord.setVisibility(View.INVISIBLE);
+                cardopen.setVisibility(View.GONE);
                 final String path = getExternalFilesDir(null).getAbsoluteFile()+"/out"+flag+".mp3";
                 //File theFile =new File(path);
                 in = new FileInputStream(path);

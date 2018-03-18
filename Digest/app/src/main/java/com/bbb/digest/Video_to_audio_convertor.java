@@ -1,6 +1,7 @@
 package com.bbb.digest;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -38,6 +39,8 @@ public class Video_to_audio_convertor extends AppCompatActivity {
     ImageView thumbnail;
     java.util.Date date= new java.util.Date();
     String ad = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date.getTime());
+
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,7 +132,11 @@ public class Video_to_audio_convertor extends AppCompatActivity {
          *  Update with a valid audio file!
          *  Supported formats: {@link AndroidAudioConverter.AudioFormat}
          */
-
+        progressDialog=new ProgressDialog(Video_to_audio_convertor.this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Convering, please wait...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
         InputStream in = null;
 
         String path=getExternalFilesDir(null).getAbsoluteFile()+"/out"+ad+".aac";
@@ -137,6 +144,7 @@ public class Video_to_audio_convertor extends AppCompatActivity {
         IConvertCallback callback = new IConvertCallback() {
             @Override
             public void onSuccess(File convertedFile) {
+                progressDialog.dismiss();
                 Toast.makeText(Video_to_audio_convertor.this, "SUCCESS: " + convertedFile.getPath(), Toast.LENGTH_LONG).show();
 
                 Intent i = new Intent(Video_to_audio_convertor.this, Audio_to_text.class);
@@ -145,6 +153,7 @@ public class Video_to_audio_convertor extends AppCompatActivity {
             }
             @Override
             public void onFailure(Exception error) {
+                progressDialog.dismiss();
                 Toast.makeText(Video_to_audio_convertor.this, "ERROR: " + error.getMessage(), Toast.LENGTH_LONG).show();
             }
         };

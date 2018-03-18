@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         app:cardCornerRadius="15dp"
+        android:id="@+id/cardopen"
         android:padding="15dp">
         <TextView
             android:layout_width="wrap_content"
