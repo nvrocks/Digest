@@ -8,5 +8,11 @@ Digest is an android application + chrome extension which lets you summarize lon
 * nltk library   
 * Android Studio
 
-# Working
-For video summary, firstly mp4 file is converted to aac file through ffmpeg library and then text is extracted from audio through IBM Watson. Text is extracted from image through OCR. Then textrank algorithm is applied to text to make its summary.
+# Working of android app
+*For summarizing video files, firstly the video file is converted to audio file through "ffmpeg library" and then text is extracted from audio through IBM Watson.This text then summarized using machine learning algorithm.
+*For audio, it is first converted into text and then summarized.
+*For images, text is extracted using OCR and then it is summarized.
+
+# Chrome extension
+It gives the summary of the text copied in you clipboard.
+Thus if you don't want to read big articles, you can just copy the article and read the summary.
