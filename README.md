@@ -14,5 +14,4 @@ Digest is an android application + chrome extension which lets you summarize lon
 * For images, text is extracted using OCR and then it is summarized.
 
 # Chrome extension
-It gives the summary of the text copied in you clipboard.
-Thus if you don't want to read big articles, you can just copy the article and read the summary.
+It gives the summary of the selected text. In backend Django server is used which runs the python script to provide the needed functionality.
